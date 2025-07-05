@@ -101,6 +101,5 @@ Archive complete: logs_archive_20250705_130012.tar.gz
 - **Nothing happens in cron:**  
   Ensure the cron job uses the `--cron` flag. The interactive menu won’t work under cron.
 
-## License
-
-MIT License. Free to use and modify.
+## Project URL:
+https://roadmap.sh/projects/log-archive-tool
