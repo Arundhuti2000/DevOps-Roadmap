@@ -1,25 +1,42 @@
-## DevOps Practice Projects (To Be Included in This Repository)
+## DevOps Practice Projects
 
-This repository will be extended with hands-on DevOps projects inspired by [roadmap.sh/devops/projects](https://roadmap.sh/devops/projects), including:
+This repository will include a growing collection of hands-on DevOps projects inspired by [roadmap.sh/devops/projects](https://roadmap.sh/devops/projects), organized by difficulty level.
 
-- **Setup a CI/CD pipeline for a sample application**
-- **Create and run a simple containerized application**
-- **Automate infrastructure deployment with Terraform**
-- **Configure and monitor a logging stack (ELK/EFK)**
-- **Provision Kubernetes clusters and deploy workloads**
-- **Write Ansible playbooks for server configuration**
-- **Use GitHub Actions for automated testing and deployment**
-- **Deploy a serverless function on AWS/GCP/Azure**
-- **Configure Prometheus + Grafana dashboards**
-- **Setup and secure Nginx as a reverse proxy**
-- **Implement GitOps using ArgoCD or FluxCD**
-- **Simulate a blue-green deployment strategy**
-- **Manage secrets using Vault or AWS Secrets Manager**
+### Beginner Projects
+
+- [Server Performance Stats](https://roadmap.sh/projects/server-performance-stats)
+- [Log Archive Tool](https://roadmap.sh/projects/log-archive-tool)
+- [Nginx Log Analyzer](https://roadmap.sh/projects/nginx-log-analyzer)
+- [GitHub Pages Deployment](https://roadmap.sh/projects/github-pages-deployment)
+- [SSH Remote Server Setup](https://roadmap.sh/projects/ssh-remote-server-setup)
+- [Static Site Server](https://roadmap.sh/projects/static-site-server)
+- [Basic DNS Setup](https://roadmap.sh/projects/basic-dns-setup)
+- [Simple Monitoring](https://roadmap.sh/projects/simple-monitoring)
+- [Dummy Systemd Service](https://roadmap.sh/projects/dummy-systemd-service)
+- [Basic Dockerfile](https://roadmap.sh/projects/basic-dockerfile)
+- [EC2 Instance](https://roadmap.sh/projects/ec2-instance)
+
+### Intermediate Projects
+
+- [Configuration Management with Ansible](https://roadmap.sh/projects/configuration-management)
+- [IaC on DigitalOcean with Terraform](https://roadmap.sh/projects/iac-on-digitalocean)
+- [Node.js Service Deployment](https://roadmap.sh/projects/nodejs-service-deployment)
+- [Dockerized Service CI/CD](https://roadmap.sh/projects/dockerized-service)
+- [Multi-Container App with Docker Compose](https://roadmap.sh/projects/multi-container-application)
+- [Automated Database Backups](https://roadmap.sh/projects/automated-db-backups)
+- [Bastion Host Setup](https://roadmap.sh/projects/bastion-host)
+- [File Integrity Checker](https://roadmap.sh/projects/file-integrity-checker)
+
+### Advanced Projects
+
+- [Blue-Green Deployment](https://roadmap.sh/projects/blue-green-deployment)
+- [Monitoring with Prometheus and Grafana](https://roadmap.sh/projects/prometheus-and-grafana)
+- [Multi-Service Docker Setup](https://roadmap.sh/projects/multi-service-application)
+- [Service Discovery Implementation](https://roadmap.sh/projects/service-discovery)
 
 Each project will include:
-- Step-by-step instructions
-- Infrastructure diagrams (where applicable)
-- Scripts/configuration files
-- Explanations of real-world scenarios
 
-These projects aim to bridge the gap between theory and practice — helping learners gain practical experience in deploying, automating, and maintaining infrastructure and applications using modern DevOps tools and workflows.
+- Step-by-step instructions  
+- Scripts and configurations  
+- Optional diagrams and system design notes  
+- Real-world scenarios and use cases
