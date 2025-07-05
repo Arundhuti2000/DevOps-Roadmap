@@ -4,7 +4,7 @@ This repository will include a growing collection of hands-on DevOps projects in
 
 ### Beginner Projects
 
-- [Server Performance Stats](https://roadmap.sh/projects/server-performance-stats)
+- [Server Performance Stats](https://roadmap.sh/projects/server-stats)
 - [Log Archive Tool](https://roadmap.sh/projects/log-archive-tool)
 - [Nginx Log Analyzer](https://roadmap.sh/projects/nginx-log-analyzer)
 - [GitHub Pages Deployment](https://roadmap.sh/projects/github-pages-deployment)
