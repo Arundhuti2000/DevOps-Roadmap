@@ -7,6 +7,9 @@ A simple bash script to monitor basic server performance stats:
 - Top 5 Processes by CPU
 - Top 5 Processes by Memory
 
+# Project URL:
+https://github.com/Arundhuti2000/server-stats
+
 ## How to Run
 
 ```bash
