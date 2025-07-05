@@ -8,7 +8,7 @@ A simple bash script to monitor basic server performance stats:
 - Top 5 Processes by Memory
 
 # Project URL:
-(https://roadmap.sh/projects/server-stats)
+https://roadmap.sh/projects/server-stats
 
 ## How to Run
 
