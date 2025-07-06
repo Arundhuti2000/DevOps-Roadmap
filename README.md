@@ -6,7 +6,7 @@ This repository will include a growing collection of hands-on DevOps projects in
 
 - [Server Performance Stats](https://roadmap.sh/projects/server-stats)
 - [Log Archive Tool](https://roadmap.sh/projects/log-archive-tool)
-- [Nginx Log Analyzer](https://roadmap.sh/projects/nginx-log-analyzer)
+- [Nginx Log Analyzer](https://roadmap.sh/projects/nginx-log-analyser)
 - [GitHub Pages Deployment](https://roadmap.sh/projects/github-pages-deployment)
 - [SSH Remote Server Setup](https://roadmap.sh/projects/ssh-remote-server-setup)
 - [Static Site Server](https://roadmap.sh/projects/static-site-server)
