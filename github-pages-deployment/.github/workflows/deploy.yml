@@ -23,8 +23,12 @@ jobs:
         uses: actions/checkout@4
       - name: Setup Pages
         uses: actions/configure-pages@5
+      - name: Create .nojekyll file
+        run: touch github-pages-deployment/.nojekyll
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'github-pages-deployment'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
