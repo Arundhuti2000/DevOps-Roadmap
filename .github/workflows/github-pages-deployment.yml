@@ -26,16 +26,10 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      - name: Create .nojekyll file
-        # This command creates the .nojekyll file inside the folder that will be uploaded.
-        # It's crucial for telling GitHub Pages to serve static files directly.
-        run: touch github-pages-deployment/.nojekyll
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # This path tells the action to upload the *contents* of this folder.
-          # The .nojekyll file created above will be included here.
           path: 'github-pages-deployment'
 
       - name: Deploy to GitHub Pages
