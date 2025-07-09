@@ -1,43 +1,43 @@
-name: Deploy Static Website to GitHub Pages
+# name: Deploy Static Website to GitHub Pages
 
-on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'github-pages-deployment/index.html'
+# on:
+#   push:
+#     branches:
+#       - main
+#     paths:
+#       - 'github-pages-deployment/index.html'
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+#     permissions:
+#       contents: read
+#       pages: write
+#       id-token: write
 
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+#     environment:
+#       name: github-pages
+#       url: ${{ steps.deployment.outputs.page_url }}
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v4
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
+#       - name: Setup Pages
+#         uses: actions/configure-pages@v5
 
-      - name: Create .nojekyll file
-        # This command creates the .nojekyll file inside the folder that will be uploaded.
-        # It's crucial for telling GitHub Pages to serve static files directly.
-        run: touch github-pages-deployment/.nojekyll
+#       - name: Create .nojekyll file
+#         # This command creates the .nojekyll file inside the folder that will be uploaded.
+#         # It's crucial for telling GitHub Pages to serve static files directly.
+#         run: touch github-pages-deployment/.nojekyll
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          # This path tells the action to upload the *contents* of this folder.
-          # The .nojekyll file created above will be included here.
-          path: 'github-pages-deployment'
+#       - name: Upload artifact
+#         uses: actions/upload-pages-artifact@v3
+#         with:
+#           # This path tells the action to upload the *contents* of this folder.
+#           # The .nojekyll file created above will be included here.
+#           path: 'github-pages-deployment'
 
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+#       - name: Deploy to GitHub Pages
+#         id: deployment
+#         uses: actions/deploy-pages@v4
