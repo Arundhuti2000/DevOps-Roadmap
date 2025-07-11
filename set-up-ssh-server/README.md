@@ -204,18 +204,30 @@ Protect your server from brute-force attacks.
 
    In `jail.local`, ensure the `[sshd]` section is enabled and review `bantime`, `findtime`, `maxretry` (defaults are usually fine):
    ```ini
-   # [DEFAULT] section (usually at the top)
-   bantime = 10m
-   findtime = 10m
-   maxretry = 5
+   # /etc/fail2ban/jail.local
 
-   # ... (scroll down to [sshd] section) ...
-
-   [sshd]
-   enabled = true
-   port = ssh
-   filter = sshd
-   logpath = %(sshd_log)s
+    [DEFAULT]
+    # Ban hosts for one hour:
+    bantime = 1h
+    
+    # A host is banned if it has 'maxretry' failures within 'findtime' seconds.
+    findtime = 10m
+    
+    # Number of attempts before a ban.
+    maxretry = 5
+    
+    # Disable all jails by default
+    enabled = false
+    
+    # ... (other default settings) ...
+    
+    # SSHD jail:
+    [sshd]
+    enabled = true  # Explicitly enable SSH protection
+    port = ssh
+    filter = sshd
+    logpath = %(sshd_log)s
+    backend = %(sshd_backend)s
    ```
 
    Save and exit: `Ctrl+O`, Enter, `Ctrl+X`
