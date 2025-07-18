@@ -37,7 +37,7 @@ The primary goal of this project is to learn and understand the concepts of:
 ## Deployment URL
 
 Once the workflow runs successfully, your website will be accessible at:
-`https://<your-username>.github.io/gh-deployment-workflow/`
+`https://arundhuti2000.github.io/DevOps-Roadmap/`
 
 **Replace `<your-username>` with your actual GitHub username.**
 
