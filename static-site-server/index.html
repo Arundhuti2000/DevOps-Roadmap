@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veg Manchurian Recipe</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+            color: #e0e0e0;
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 80%, rgba(255, 107, 107, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255, 165, 0, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 40px 0;
+            background: rgba(26, 26, 26, 0.8);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        .recipe-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #ff6b6b, #ffa500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 20px rgba(255, 107, 107, 0.3);
+        }
+        .recipe-subtitle {
+            font-size: 1.2rem;
+            color: #b0b0b0;
+            margin-bottom: 30px;
+        }
+        .recipe-info {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        .info-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .info-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.2);
+        }
+        .info-label {
+            font-size: 0.9rem;
+            color: #888;
+            margin-bottom: 5px;
+        }
+        .info-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ffa500;
+        }
+        .section {
+            margin-bottom: 50px;
+            background: rgba(26, 26, 26, 0.6);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+        .section-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: #ff6b6b;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .section-icon {
+            font-size: 2.5rem;
+        }
+        .ingredients-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        .ingredient-category {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .category-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #ffa500;
+            text-align: center;
+        }
+        .ingredient-list {
+            list-style: none;
+        }
+        .ingredient-item {
+            margin-bottom: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        .ingredient-item:hover {
+            background: rgba(255, 107, 107, 0.1);
+            padding-left: 10px;
+            border-radius: 8px;
+        }
+        .ingredient-item:last-child {
+            border-bottom: none;
+        }
+        .ingredient-name {
+            font-weight: 500;
+            color: #e0e0e0;
+        }
+        .ingredient-amount {
+            color: #ffa500;
+            font-weight: 600;
+        }
+        .method-steps {
+            counter-reset: step-counter;
+        }
+        .method-step {
+            background: rgba(255, 255, 255, 0.05);
+            margin-bottom: 25px;
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 4px solid #ff6b6b;
+            position: relative;
+            counter-increment: step-counter;
+            transition: all 0.3s ease;
+        }
+        .method-step:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.2);
+        }
+        .method-step::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: -20px;
+            top: -10px;
+            background: linear-gradient(45deg, #ff6b6b, #ffa500);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+        }
+        .step-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #ffa500;
+        }
+        .step-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+        .step-content ul {
+            list-style: none;
+            margin-top: 10px;
+        }
+        .step-content li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+        .step-content li::before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+        .tips-section {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(255, 165, 0, 0.1));
+            border: 1px solid rgba(255, 107, 107, 0.3);
+        }
+        .tip-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            border-left: 4px solid #ffa500;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+        .tip-item:hover {
+            transform: translateX(5px);
+            background: rgba(255, 165, 0, 0.1);
+        }
+        .tip-item:last-child {
+            margin-bottom: 0;
+        }
+        .footer {
+            text-align: center;
+            padding: 30px;
+            background: rgba(26, 26, 26, 0.8);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        .footer-text {
+            font-size: 1.2rem;
+            color: #ffa500;
+            font-weight: 600;
+        }
+        .result-image-container {
+            text-align: center;
+        }
+        
+        /* Fixed image styling */
+        .final-image-display {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        #finalResultImage {
+            max-width: 100%;
+            max-height: 400px;
+            width: auto;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s ease;
+            object-fit: cover;
+        }
+        
+        #finalResultImage:hover {
+            transform: scale(1.05);
+            box-shadow: 0 25px 50px rgba(255, 107, 107, 0.3);
+        }
+        
+        .image-caption {
+            margin-top: 20px;
+            font-size: 1.1rem;
+            color: #b0b0b0;
+            font-style: italic;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .recipe-title {
+                font-size: 2rem;
+            }
+            .recipe-info {
+                gap: 20px;
+            }
+            .ingredients-grid {
+                grid-template-columns: 1fr;
+            }
+            .section {
+                padding: 25px;
+            }
+            .method-step {
+                padding: 20px;
+            }
+            #finalResultImage {
+                max-height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header floating">
+            <h1 class="recipe-title">🌶️🥬 Veg Manchurian</h1>
+            <p class="recipe-subtitle">No-Carrot Version – Dry & Gravy</p>
+            <div class="recipe-info">
+                <div class="info-item">
+                    <div class="info-label">🍴 Yields</div>
+                    <div class="info-value">12–15 balls</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">⏱️ Time</div>
+                    <div class="info-value">30–40 mins</div>
+                </div>
+            </div>
+        </div>
+        <div class="section">
+            <h2 class="section-title">
+                <span class="section-icon">🧺</span>
+                Ingredients
+            </h2>
+            <div class="ingredients-grid">
+                <div class="ingredient-category">
+                    <h3 class="category-title">For Manchurian Balls</h3>
+                    <ul class="ingredient-list">
+                        <li class="ingredient-item">
+                            <span class="ingredient-name">Cabbage</span>
+                            <span class="ingredient-amount">2 cups, finely shredded</span>
+                        </li>
+                        <li class="ingredient-item">
+                            <span class="ingredient-name">Capsicum</span>
+                            <span class="ingredient-amount">¼ cup, finely chopped (optional)</span>
+                        </li>
+                        <li class="ingredient-item">
+                            <span class="ingredient-name">Spring onions</span>
+                            <span class="ingredient-amount">¼ cup, finely chopped</span>
+                        </li>
+                        <li class="ingredient-item">
+                            <span class="ingredient-name">Garlic</span>
+                            <span class="ingredient-amount">4 cloves, minced</span>
+                        </li>
+                        <li class="ingredient-item">
+                            <span class="ingredient-name">Ginger</span>
+                            <span class="ingredient-amount">1 inch, grated</span>
+                        </li>
+                        <li class="ingredient-item">
+                            <span class="ingredient-name">Green chili</span>
+                            <span class="ingredient-amount">1, finely chopped</span>
+                        </li>
+                        <li class="ingredient-item">
+                            <span class="ingredient-name">Cornflour</span>
+                            <span class="ingredient-amount">2 tbsp</span>
+                        </li>
+                        <li class="ingredient-item">
+                            <span class="ingredient-name">Maida (all-purpose flour)</span>
+                            <span class="ingredient-amount">3 tbsp</span>
+                        </li>
+                        <li class="ingredient-item">
+                            <span class="ingredient-name">Salt & Pepper</span>
+                            <span class="ingredient-amount">to taste & ¼ tsp</span>
+                        </li>
+                        <li class="ingredient-item">
+                            <span class="ingredient-name">Oil</span>
+                            <span class="ingredient-amount">for frying</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="ingredient-category">
+                    <h3 class="category-title">For Sauce</h3>
+                    <ul class="ingredient-list">
+                        <li class="ingredient-item">
+                            <span class="ingredient-name">Oil</span>
+                            <span class="ingredient-amount">2 tbsp</span>
+                        </li>
+                        <li class="ingredient-item">
+                            <span class="ingredient-name">Garlic</span>
+                            <span class="ingredient-amount">5 cloves, finely chopped</span>
+                        </li>
+                        <li class="ingredient-item">
+                            <span class="ingredient-name">Ginger</span>
+                            <span class="ingredient-amount">1 inch, finely chopped</span>
+                        </li>
+                        <li class="ingredient-item">
+                            <span class="ingredient-name">Green chili</span>
+                            <span class="ingredient-amount">1, slit or chopped</span>
+                        </li>
+                        <li class="ingredient-item">
+                            <span class="ingredient-name">Onion</span>
+                            <span class="ingredient-amount">1 small, cubed</span>
+                        </li>
+                        <li class="ingredient-item">
+                            <span class="ingredient-name">Capsicum</span>
+                            <span class="ingredient-amount">½ cup, cubed</span>
+                        </li>
+                        <li class="ingredient-item">
+                            <span class="ingredient-name">Spring onions</span>
+                            <span class="ingredient-amount">¼ cup, greens + whites</span>
+                        </li>
+                        <li class="ingredient-item">
+                            <span class="ingredient-name">Soy sauce</span>
+                            <span class="ingredient-amount">2 tbsp</span>
+                        </li>
+                        <li class="ingredient-item">
+                            <span class="ingredient-name">Red chili sauce</span>
+                            <span class="ingredient-amount">1 tbsp</span>
+                        </li>
+                        <li class="ingredient-item">
+                            <span class="ingredient-name">Tomato ketchup</span>
+                            <span class="ingredient-amount">2 tbsp</span>
+                        </li>
+                        <li class="ingredient-item">
+                            <span class="ingredient-name">Vinegar</span>
+                            <span class="ingredient-amount">½ to 1 tsp max</span>
+                        </li>
+                        <li class="ingredient-item">
+                            <span class="ingredient-name">Black pepper</span>
+                            <span class="ingredient-amount">¼ tsp</span>
+                        </li>
+                        <li class="ingredient-item">
+                            <span class="ingredient-name">Cornflour slurry</span>
+                            <span class="ingredient-amount">1 tbsp + ¼ cup water</span>
+                        </li>
+                        <li class="ingredient-item">
+                            <span class="ingredient-name">Water</span>
+                            <span class="ingredient-amount">½ to 1 cup (for gravy)</span>
+                        </li>
+                        <li class="ingredient-item">
+                            <span class="ingredient-name">Salt & Sugar</span>
+                            <span class="ingredient-amount">as needed & ½ tsp</span>
+                        </li>
+                        <li class="ingredient-item">
+                            <span class="ingredient-name">Butter</span>
+                            <span class="ingredient-amount">½ tsp (optional)</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="section">
+            <h2 class="section-title">
+                <span class="section-icon">🔥</span>
+                Method
+            </h2>
+            <div class="method-steps">
+                <div class="method-step">
+                    <h3 class="step-title">🧆 Make the Manchurian Balls</h3>
+                    <div class="step-content">
+                        <ul>
+                            <li>Mix cabbage, capsicum, spring onion, garlic, ginger, chili, salt, and pepper.</li>
+                            <li>Add cornflour + maida and mix till it holds together. No water needed!</li>
+                            <li>Shape into balls (~12–15).</li>
+                            <li>Fry until crisp golden brown (deep or shallow fry).</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="method-step">
+                    <h3 class="step-title">🍲 Make the Sauce</h3>
+                    <div class="step-content">
+                        <ul>
+                            <li>Heat oil. Sauté garlic, ginger, and green chili until aromatic.</li>
+                            <li>Add onions + capsicum. Toss for 1–2 minutes (should stay crunchy).</li>
+                            <li>Stir in soy sauce, chili sauce, ketchup, and only ½ tsp vinegar.</li>
+                            <li>Add black pepper + salt + sugar to balance. Taste and adjust.</li>
+                            <li>Toss in fried balls for dry version. Stir-fry for 2–3 minutes. Garnish with spring onions.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="method-step">
+                    <h3 class="step-title">💦 For Gravy Version</h3>
+                    <div class="step-content">
+                        <ul>
+                            <li>Add ½–1 cup water to the sauce and bring to a boil.</li>
+                            <li>Stir in cornflour slurry. Simmer until it thickens slightly.</li>
+                            <li>Add Manchurian balls and simmer for 2–3 mins.</li>
+                            <li>Finish with a small dab of butter for depth. Garnish with spring onions.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="section tips-section">
+            <h2 class="section-title">
+                <span class="section-icon">💡</span>
+                Tips & Tricks
+            </h2>
+            <div class="tip-item">
+                <strong>No carrot? No problem</strong> — cabbage carries the crunch!
+            </div>
+            <div class="tip-item">
+                <strong>Sauce too sour?</strong> Add ½ tsp sugar, extra ketchup, or water + slurry to fix it.
+            </div>
+            <div class="tip-item">
+                <strong>Want restaurant-style shine?</strong> That ½ tsp butter at the end works wonders.
+            </div>
+        </div>
+        <div class="section">
+            <h2 class="section-title">
+                <span class="section-icon">📸</span>
+                Final Result
+            </h2>
+            <div class="result-image-container">
+                <div class="final-image-display">
+                    <img src="./images/manchurian.jpg" alt="Delicious Veg Manchurian - Final Result" id="finalResultImage">
+                </div>
+                <div class="image-caption">
+                    <p>Your perfectly crispy Veg Manchurian balls with that restaurant-style shine! 🌟</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <p class="footer-text">Ready to make your wok sing, Honey? 🎶</p>
+        </div>
+    </div>
+</body>
+</html>
