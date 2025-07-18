@@ -191,75 +191,154 @@ sudo apt install rsync -y
 rsync --version
 ```
 
-### 7.2 Rsync from Local Machine to VM
+### 7.2 Set Up SSH Key Authentication
 
-**From your local machine** (Git Bash, Terminal, etc.):
+**Fix SSH key permissions in WSL:**
 
 ```bash
-# Basic syntax:
-rsync -av [local-files] azureuser@[VM-IP]:[remote-path]
+# Copy SSH keys from Windows to WSL
+cp /mnt/c/Users/[username]/.ssh/azure_key2* ~/.ssh/
 
-# Copy single file
-rsync -av index.html azureuser@172.206.195.75:/var/www/html/
+# Set correct permissions
+chmod 600 ~/.ssh/azure_key2      # Private key
+chmod 644 ~/.ssh/azure_key2.pub  # Public key
+chmod 700 ~/.ssh                 # SSH directory
 
-# Copy entire directory
-rsync -av ./my-website/ azureuser@172.206.195.75:/var/www/html/
-
-# Copy with delete (mirror - removes files not in source)
-rsync -av --delete ./my-website/ azureuser@172.206.195.75:/var/www/html/
-
-# Copy with exclusions
-rsync -av --exclude='.git' --exclude='node_modules' ./my-website/ azureuser@172.206.195.75:/var/www/html/
+# Create SSH config for easier access
+nano ~/.ssh/config
 ```
 
-### 7.3 Common Rsync Options
+Add to SSH config:
+```
+Host 172.206.195.75
+    User azureuser
+    IdentityFile ~/.ssh/azure_key2
+    IdentitiesOnly yes
+```
 
-- `-a` = archive mode (preserves permissions, timestamps)
-- `-v` = verbose (shows progress)
-- `-r` = recursive
-- `--delete` = delete files in destination that don't exist in source
-- `--dry-run` = test without actually copying
-- `--exclude` = exclude specific files/folders
+**Test SSH connection:**
+```bash
+# Test passwordless SSH
+ssh azureuser@172.206.195.75 'echo "Success"'
+```
 
-### 7.4 Fix Permissions After Upload
+### 7.3 Create Automated Deployment Script
+
+Create `simple-deploy.sh`:
 
 ```bash
-# SSH into VM and fix permissions
-ssh azureuser@[YOUR-VM-IP]
+#!/bin/bash
 
-# Set proper ownership and permissions
-sudo chown -R www-data:www-data /var/www/html/
-sudo chmod -R 755 /var/www/html/
+echo "🚀 Deploying website..."
+
+# Clean any Windows metadata files
+find ./website/ -name "*:Zone.Identifier" -delete
+
+# Upload to user home directory (avoids permission issues)
+echo "📤 Uploading files..."
+rsync -avz --delete ./website/ azureuser@172.206.195.75:~/website-temp/
+
+# Move to web directory and fix permissions
+echo "🔧 Installing files..."
+ssh azureuser@172.206.195.75 "
+    sudo rm -rf /var/www/html/*
+    sudo cp -r ~/website-temp/* /var/www/html/
+    sudo chown -R www-data:www-data /var/www/html/
+    sudo chmod -R 755 /var/www/html/
+    rm -rf ~/website-temp
+    sudo systemctl reload nginx
+"
+
+echo "✅ Deployment complete!"
+echo "🌐 Visit: http://172.206.195.75"
+```
+
+### 7.4 Deploy Your Website
+
+```bash
+# Make script executable
+chmod +x simple-deploy.sh
+
+# Deploy your website
+./simple-deploy.sh
+```
+
+### 7.5 Project Structure
+
+```
+~/my-website-project/
+├── simple-deploy.sh    # Deployment script
+├── website/           # Your website files
+│   ├── index.html
+│   ├── style.css
+│   └── images/
+│       └── manchurian.jpg
+└── README.md
 ```
 
 ---
 
 ## 🎯 Step 8: Deploy Your Website
 
-### 8.1 Example Deployment Workflow
+### 8.1 Website Deployment Workflow
 
-**On your local machine:**
+**Set up your project structure:**
 
 ```bash
-# 1. Prepare your website files
-ls my-website/
-# index.html  style.css  images/  scripts/
+# Create project directory in WSL
+mkdir ~/my-website-project
+cd ~/my-website-project
 
-# 2. Deploy to VM
-rsync -av --delete ./my-website/ azureuser@172.206.195.75:/var/www/html/
+# Create website directory
+mkdir website
 
-# 3. Fix permissions on VM
-ssh azureuser@172.206.195.75 "sudo chown -R www-data:www-data /var/www/html/ && sudo chmod -R 755 /var/www/html/"
+# Add your website files
+cp /mnt/c/Users/[username]/path/to/your/files/* website/
+# Or create files directly:
+nano website/index.html
 ```
 
-### 8.2 Verify Deployment
+### 8.2 One-Command Deployment
+
+```bash
+# Deploy your website with one command
+./simple-deploy.sh
+```
+
+**Expected output:**
+```
+🚀 Deploying website...
+📤 Uploading files...
+sending incremental file list
+./
+index.html
+images/manchurian.jpg
+
+🔧 Installing files...
+✅ Deployment complete!
+🌐 Visit: http://172.206.195.75
+```
+
+### 8.3 Verify Deployment
 
 ```bash
 # Test website access
-curl http://[YOUR-PUBLIC-IP]
+curl http://172.206.195.75
 
 # Or visit in browser:
-http://[YOUR-PUBLIC-IP]
+http://172.206.195.75
+```
+
+### 8.4 Update Workflow
+
+```bash
+# 1. Edit your website files
+nano website/index.html
+
+# 2. Deploy changes
+./simple-deploy.sh
+
+# 3. Changes are live instantly!
 ```
 
 ---
@@ -269,27 +348,39 @@ http://[YOUR-PUBLIC-IP]
 ### Common Issues and Solutions
 
 #### Issue: Can't access website externally
-
 **Solution:**
 1. Check NSG rules allow port 80
 2. Verify nginx is running: `sudo systemctl status nginx`
 3. Check firewall: `sudo ufw status` (should be inactive by default)
 
-#### Issue: Rsync permission denied
-
+#### Issue: SSH key permission denied
 **Solution:**
 ```bash
-# Option 1: Upload to user directory first
-rsync -av ./files/ azureuser@[VM-IP]:~/temp/
-ssh azureuser@[VM-IP] "sudo cp -r ~/temp/* /var/www/html/"
+# Fix SSH key permissions in WSL
+chmod 600 ~/.ssh/azure_key2
+chmod 644 ~/.ssh/azure_key2.pub
+chmod 700 ~/.ssh
+```
 
-# Option 2: Use sudo after upload
-rsync -av ./files/ azureuser@[VM-IP]:~/
-ssh azureuser@[VM-IP] "sudo rsync -av ~/files/ /var/www/html/"
+#### Issue: Rsync permission denied
+**Solution:**
+```bash
+# Use the two-step deployment approach:
+# 1. Upload to user directory first
+rsync -avz ./website/ azureuser@[VM-IP]:~/temp/
+
+# 2. Move to web directory with sudo
+ssh azureuser@[VM-IP] "sudo cp -r ~/temp/* /var/www/html/ && rm -rf ~/temp"
+```
+
+#### Issue: Zone.Identifier files causing errors
+**Solution:**
+```bash
+# Clean Windows metadata files before deployment
+find ./website/ -name "*:Zone.Identifier" -delete
 ```
 
 #### Issue: Files not showing latest changes
-
 **Solution:**
 ```bash
 # Clear browser cache or use incognito mode
@@ -354,10 +445,35 @@ du -sh /var/www/html/*
 - ✅ Ubuntu updated and nginx installed
 - ✅ Nginx running and accessible locally (`curl localhost`)
 - ✅ Azure NSG configured to allow HTTP traffic (port 80)
-- ✅ Website accessible externally via public IP
+- ✅ SSH key authentication configured (passwordless access)
 - ✅ Rsync installed and working
-- ✅ Files successfully deployed from local machine to VM
-- ✅ Website displaying correctly in browser
+- ✅ Automated deployment script created (`simple-deploy.sh`)
+- ✅ Website successfully deployed and accessible at public IP
+- ✅ One-command deployment workflow established
+
+## 📊 Final Result
+
+**🌐 Live Website:** `http://172.206.195.75` (replace with your actual IP)
+
+**🚀 Quick Deploy:** 
+```bash
+# Edit files in ./website/
+nano website/index.html
+
+# Deploy with one command
+./simple-deploy.sh
+```
+
+**📁 Project Structure:**
+```
+~/my-website-project/
+├── simple-deploy.sh    # One-click deployment
+├── website/           # Your website files
+│   ├── index.html
+│   ├── style.css
+│   └── images/
+└── README.md         # This guide
+```
 
 ---
 
